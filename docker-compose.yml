@@ -4,31 +4,25 @@ services:
   gitlab:
     image: gitlab/gitlab-ce:latest
     hostname: gitlab.lab.home
+    container_name: gitlab
     restart: unless-stopped
     environment:
       GITLAB_OMNIBUS_CONFIG: |
         gitlab_rails['gitlab_shell_ssh_port'] = 5022
     ports:
-      - "443:443"
-      - "80:80"
-      - "5022:22"
+      - "192.168.73.249:80:80"
+      - "192.168.73.249:5022:22"
     volumes:
       - /data/docker/gitlab/etc/gitlab:/etc/gitlab
       - /data/docker/gitlab/var/opt/gitlab:/var/opt/gitlab
       - /data/docker/gitlab/var/log/gitlab:/var/log/gitlab
-    networks:
-      - ens37
 
   gitlab-runner:
     image: gitlab/gitlab-runner:latest
+    container_name: runner
     restart: unless-stopped
     depends_on:
       - gitlab
     volumes:
       - /data/docker/gitlab/etc/gitlab-runner:/etc/gitlab-runner
       - /data/docker/gitlab/var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - ens37
-
-networks:
-  ens37:
