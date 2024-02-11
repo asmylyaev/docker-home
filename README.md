@@ -1,4 +1,6 @@
-#### Установите Docker и Docker Compose
+## Установка и запуск Gitlab и Gitlab-runner в docker (home-lab)
+
+#### Установка Docker и Docker Compose
 ```
 sudo apt update
 sudo apt install docker.io containerd docker-compose -y
@@ -10,7 +12,7 @@ sudo systemctl enable docker
 sudo systemctl status docker
 ```
 
-#### Настройка каталога GitLab
+#### Настройка рабочих каталогов
 ``` 
 sudo mkdir -p /data/docker/gitlab/{data,config/ssl,logs}
 sudo mkdir -p /data/docker/gitlab-runner/config
@@ -20,22 +22,28 @@ sudo nano .env
 GITLAB_HOME=/data/docker/gitlab
 ```
 
-#### Подготовка и запуск контейнеров
-##### Добавляем данные в репозитории из docker-compose.yml на сервер 
+##### Добавляем данные из docker-compose.yml на сервер/vm 
 sudo nano docker-compose.yml
 
-#####  Запускаем и проверяем статус 
+#####  Запускаем контейнеры и проверяем статус 
 ``` 
 sudo docker-compose up -d
-sudo docker ps
+sudo docker compose ps
 ```
 
-#### Gitlab посмотреть текущий пароль root
+#### Gitlab - посмотреть текущий пароль root
 ``` 
 sudo docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
 ```
-#### Регистрация runner
+#### Регистрация runner в Gitlab
 ``` 
 cd /data/docker
-docker compose exec gitlab-runner gitlab-runner register
+sudo docker compose exec gitlab-runner gitlab-runner register
+```
+``` 
+GitLab instance URL - fqdn адрес gitlab
+Registration token - Gitlab->Settings->CI/CD->Runners
+tags for the runner - home
+executor - docker
+default Docker image - python 3.11-slim
 ```
