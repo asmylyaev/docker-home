@@ -19,9 +19,9 @@ services:
 
   gitlab-runner:
     image: gitlab/gitlab-runner:latest
-    container_name: runner
+    container_name: gitlab-runner
     restart: unless-stopped
-    depends_on:
+    links:
       - gitlab
     volumes:
       - /data/docker/gitlab/etc/gitlab-runner:/etc/gitlab-runner
