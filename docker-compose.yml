@@ -13,9 +13,10 @@ services:
       - "192.168.73.249:80:80"
       - "192.168.73.249:5022:22"
     volumes:
-      - /data/docker/gitlab/etc/gitlab:/etc/gitlab
-      - /data/docker/gitlab/var/opt/gitlab:/var/opt/gitlab
-      - /data/docker/gitlab/var/log/gitlab:/var/log/gitlab
+      - '${GITLAB_HOME}/config:/etc/gitlab'
+      - '${GITLAB_HOME}/logs:/var/log/gitlab'
+      - '${GITLAB_HOME}/data:/var/opt/gitlab'
+      - '${GITLAB_HOME}/config/ssl:/etc/gitlab/ssl'
 
   gitlab-runner:
     image: gitlab/gitlab-runner:latest
@@ -24,5 +25,5 @@ services:
     links:
       - gitlab
     volumes:
-      - /data/docker/gitlab/etc/gitlab-runner:/etc/gitlab-runner
+      - /data/docker/gitlab-runner/config:/etc/gitlab-runner'
       - /var/run/docker.sock:/var/run/docker.sock
