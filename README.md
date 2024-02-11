@@ -1,4 +1,4 @@
-## Установка и запуск Gitlab и Gitlab-runner в docker (home-lab)
+## Установка и запуск Gitlab и Gitlab-runner в docker на Ubunty 20.04 (home-lab)
 
 #### Установка Docker и Docker Compose
 ```
