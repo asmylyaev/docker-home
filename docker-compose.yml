@@ -25,5 +25,5 @@ services:
     links:
       - gitlab
     volumes:
-      - /data/docker/gitlab-runner/config:/etc/gitlab-runner'
+      - /data/docker/gitlab-runner/config:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
