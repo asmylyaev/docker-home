@@ -5,25 +5,43 @@ services:
     image: gitlab/gitlab-ce:latest
     hostname: gitlab.lab.home
     container_name: gitlab
-    restart: unless-stopped
+    restart: always
     environment:
+      GITLAB_HOME=/data/docker/gitlab
       GITLAB_OMNIBUS_CONFIG: |
         gitlab_rails['gitlab_shell_ssh_port'] = 5022
     ports:
       - "192.168.73.249:80:80"
       - "192.168.73.249:5022:22"
     volumes:
-      - '${GITLAB_HOME}/config:/etc/gitlab'
-      - '${GITLAB_HOME}/logs:/var/log/gitlab'
-      - '${GITLAB_HOME}/data:/var/opt/gitlab'
-      - '${GITLAB_HOME}/config/ssl:/etc/gitlab/ssl'
+      - ${GITLAB_HOME}/config:/etc/gitlab
+      - ${GITLAB_HOME}/logs:/var/log/gitlab
+      - ${GITLAB_HOME}/data:/var/opt/gitlab
+      - ${GITLAB_HOME}/config/ssl:/etc/gitlab/ssl
 
   gitlab-runner:
     image: gitlab/gitlab-runner:latest
     container_name: gitlab-runner
-    restart: unless-stopped
+    restart: always
     links:
       - gitlab
     volumes:
       - /data/docker/gitlab-runner/config:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
+
+  artifactory:
+    image: docker.bintray.io/jfrog/artifactory-pro
+      container_name: artifactory
+      ports:
+        - "8081:8081"
+      environment:
+        - ARTIFACTORY_HOME=/var/opt/jfrog/artifactory
+        - EXTRA_JAVA_OPTIONS=-Xms512m -Xmx2g
+      volumes:
+        - /data/docker/artifactory_data:/var/opt/jfrog/artifactory
+      networks:
+        - artifactory-network
+
+    networks:
+      artifactory-network:
+        driver: bridge
